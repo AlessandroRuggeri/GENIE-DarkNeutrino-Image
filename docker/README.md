@@ -172,14 +172,14 @@ docker start -i <containerID>
 ```
 
 ## Running DarkNeutrino
-Dark neutrino interactions are simulated with the `GDNu20_01a` tune. Try to run a spline generation with:
+Dark neutrino interactions are simulated with the `GDNu20_01a_00_000` tune. Try to run a spline generation with:
 ```console
-Generator/installation/bin/gmkspl -p 14,-14 -t 1000260560 -n 500 -e 20 --tune GDNu20_01a -o workspace/Fe65_spline.xml
+Generator/installation/bin/gmkspl -p 14,-14 -t 1000260560 -n 500 -e 20 --tune GDNu20_01a_00_000 -o workspace/Fe65_spline.xml
 ```
 Dark neutrino splines should not take too long to generate.
 Once the spline `xml` file has been generated, convert it to `ROOT` format with 
  ```console 
- Generator/installation/bin/gspl2root -f workspace/Fe65_spline.xml -p 14,-14 -t 1000260560 -e 20 --tune GDNu20_01a -o workspace/Fe56_spline.root
+ Generator/installation/bin/gspl2root -f workspace/Fe65_spline.xml -p 14,-14 -t 1000260560 -e 20 --tune GDNu20_01a_00_000 -o workspace/Fe56_spline.root
  ```
  Now test the event generator with dark neutrinos:
  ```console 
