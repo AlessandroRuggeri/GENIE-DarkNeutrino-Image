@@ -33,16 +33,16 @@ From the terminal, create a working directory, access it, and clone this reposit
 ```console
 mkdir /your/working/folder
 cd /your/working/folder
-git clone https://github.com/mroda88/GENIE-school.git
+git clone https://github.com/AlessandroRuggeri/GENIE-DarkNeutrino-Image.git
 ```
-This will create the `GENIE-school` folder, with all the needed scripts and files. Go to the `docker` folder inside it:
+This will create the `GENIE-DarkNeutrino-Image` folder, with all the needed scripts and files. Move inside it:
 ```console
-cd GENIE-school/docker
+cd GENIE-DarkNeutrino-Image
 ```
-In this folder, among other files, there is the dockerfile with all the instructions needed to install Genie and its dependencies.
+In the `docker` folder, among other files, there is the dockerfile with all the instructions needed to install Genie and its dependencies.
 
 ## Build the image
-From the docker folder, we can now start to build the image. First, since we haven't done it yet, check whether or not docker is running. Simply run the command
+We can now start to build the image. First, since we haven't done it yet, check whether or not docker is running. Simply run the command
 ```console
 docker
 ```
@@ -69,7 +69,7 @@ Common Commands:
 ```
 If everything is going as expected, simply run
 ```console
-docker build -t genie-inss .
+docker build -t genie-dnu -f docker/Dockerfile .
 ```
 This will create an image from the instructions in the dockerfile. It should look like:
 ```console
@@ -81,6 +81,9 @@ This will create an image from the instructions in the dockerfile. It should loo
  => [3/3] RUN mkdir /INSS &&    cd /INSS &&    wget https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.5.4.tar.gz -O LHAPDF-6.5.4.tar.gz &&    tar xf LHAPDF-6.5.4.tar.gz  1227.3s
  ```
 This will (slowly) go through all the instructions, installing all the software, setting all the environmental variables, and all this type of stuff.
+
+## Download a pre-built image from Docker Hub
+
 
 ## Exporting X11
 With the image built, we could now run a container using it. Before doing so, we need to set the export of the display so that we can use graphical interfaces from within the container.
@@ -104,26 +107,31 @@ With the server on, run
 xhost + 127.0.0.1
 ```
 
+
 ## Run the container
-You can now run the container! Simply run
+In order to access the files produced in the container from your local machine (and vice versa) you can mount a local `your/host/path` volume in a container directory, e.g `/HOME/workspace`. Simply run:
 ```console
-docker run -e DISPLAY=host.docker.internal:0 -it --name genie-inss-container genie-inss
+# create the directory to be mounted
+mkdir your/host/path
+# run the container
+docker run -e DISPLAY=host.docker.internal:0 -v your/host/path:/HOME/workspace -it --name genie-dnu-container genie-dnu
 ```
 
 This will launch and enter the container. The shell should be something like this now:
 ```console
-root@63bfd1d6f2e3:/INSS# 
+root@63bfd1d6f2e3:/HOME# 
 ```
-In the INSS folder there will be few folders of all the installed software:
+In the HOME folder there will be few folders of all the installed software:
  * ROOT6
  * Pythia6
  * THIS
  * AND
  * THAT
+ * workspace
 
 From here, test if the display is working running
 ```console
-root@730a97de8de2:/INSS# root -l
+root@730a97de8de2:/HOME# root -l
 root [0] TBrowser f
 ```
 if the TBrowser opens, great! We are just missing few exports and we are done. From wherever in the container, run
@@ -141,7 +149,7 @@ export LD_LIBRARY_PATH=$GENIE_INSTALL_DIR/lib:$LD_LIBRARY_PATH
 ```
 We are now done with the installation! You can test it with (it will take hours to complete, just check that it is launched correctly):
 ```console
-cd /INSS/Generator/installation/bin
+cd /HOME/Generator/installation/bin
 ./gmkspl -p 14,-14 -t 1000260560 -n 1 -e 20
 ```
 
@@ -150,7 +158,7 @@ When you are done with Genie, close the container with either `ctrl+D` or by typ
 
 To restart the container and maintain all the work done, run
 ```console
-docker start -i genie-inss-container
+docker start -i genie-dnu-container
 ```
 
 If you forgot to give a name to your container, run
@@ -162,10 +170,25 @@ this will print a list of all the containers run in the past. Look for the most 
 docker start -i <containerID>
 ```
 
+## Running DarkNeutrino
+Dark neutrino interactions are simulated with the `GDNu20_01a` tune. Try to run a spline generation with:
+```console
+Generator/installation/bin/gmkspl -p 14,-14 -t 1000260560 -n 500 -e 20 --tune GDNu20_01a -o workspace/Fe65_spline.xml
+```
+Dark neutrino splines should not take too long to generate.
+Once the spline `xml` file has been generated, convert it to `ROOT` format with 
+ ```console 
+ Generator/installation/bin/gspl2root -f workspace/Fe65_spline.xml -p 14,-14 -t 1000260560 -e 20 --tune GDNu20_01a -o workspace/Fe56_spline.root
+ ```
+ Now test the event generator with dark neutrinos:
+ ```console 
+ Generator/installation/bin/gevgen 
+ ```
+
 
 ## Some debug info
 Here is a (absolutely non-complete) list of the problems you could run into.
 
-* If you see that the build of your docker is failing, try to decrease the number of cores used for the ```make``` of your docker. So you can test ```make -j4``` or ```make -j1``` by editing the [Dockerfile](https://github.com/mroda88/GENIE-school/blob/119b86e5c6ef8908b1eff82cb091cf159f7ec310/docker/Dockerfile#L122). It could also be very important to reduce the use of your computer while doing this since ROOT compilation can be quite resource-demanding. An idea is to leave this run overnight and check on it in the morning. 
+* If you see that the build of your docker is failing, try to decrease the number of cores used for the ```make``` of your docker. So you can test ```make -j4``` or ```make -j1``` by editing the [Dockerfile](https://github.com/AlessandroRuggeri/GENIE-DarkNeutrino-Image/blob/main/docker/Dockerfile). It could also be very important to reduce the use of your computer while doing this since ROOT compilation can be quite resource-demanding. An idea is to leave this run overnight and check on it in the morning. 
 
 * Sometimes when using a pre-built image, the container will silently die after the run command. We don't know why (if you do, let us know). If this is the case, you have to build the image yourself using the guide above.
