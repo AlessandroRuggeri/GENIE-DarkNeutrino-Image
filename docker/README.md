@@ -42,6 +42,7 @@ cd GENIE-DarkNeutrino-Image
 In the `docker` folder, among other files, there is the dockerfile with all the instructions needed to install Genie and its dependencies.
 
 ## Build the image
+
 We can now start to build the image. First, since we haven't done it yet, check whether or not docker is running. Simply run the command
 ```console
 docker
@@ -136,15 +137,15 @@ root [0] TBrowser f
 ```
 if the TBrowser opens, great! We are just missing few exports and we are done. From wherever in the container, run
 ```console
-export GENIE=/INSS/Generator
-export LHAPDF=/INSS/LHAPDF-6.5.4
+export GENIE=/HOME/Generator
+export LHAPDF=/HOME/LHAPDF-6.5.4
 export PATH=$LHAPDF/bin:$PATH
 export LD_LIBRARY_PATH=$LHAPDF/install/lib:$LD_LIBRARY_PATH
 export LHAPDF_DATA_PATH=$LHAPDF/share/LHAPDF
-export LD_LIBRARY_PATH=/INSS/LHAPDF-6.5.4/installation/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=/INSS/v6_428/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/HOME/LHAPDF-6.5.4/installation/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/HOME/v6_428/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-export GENIE_INSTALL_DIR=/INSS/Generator/installation/
+export GENIE_INSTALL_DIR=/HOME/Generator/installation/
 export LD_LIBRARY_PATH=$GENIE_INSTALL_DIR/lib:$LD_LIBRARY_PATH
 ```
 We are now done with the installation! You can test it with (it will take hours to complete, just check that it is launched correctly):
