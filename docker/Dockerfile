@@ -46,54 +46,54 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh &&\
     apt-get -y install liblog4cpp5-dev
     
     # LHAPDF
-RUN mkdir /INSS &&\
-    cd /INSS &&\
+RUN mkdir /HOME &&\
+    cd /HOME &&\
     wget https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.5.4.tar.gz -O LHAPDF-6.5.4.tar.gz &&\
     tar xf LHAPDF-6.5.4.tar.gz &&\
-    cd /INSS/LHAPDF-6.5.4 &&\
+    cd /HOME/LHAPDF-6.5.4 &&\
     mkdir install &&\
-    ./configure --prefix=/INSS/LHAPDF-6.5.4/install &&\
+    ./configure --prefix=/HOME/LHAPDF-6.5.4/install &&\
     make &&\
     make install &&\
-    cd /INSS &&\
+    cd /HOME &&\
     # LOG4CPP
     git clone https://github.com/orocos-toolchain/log4cpp.git &&\
-    cd /INSS/log4cpp &&\
+    cd /HOME/log4cpp &&\
     mkdir build &&\
-    cd /INSS/log4cpp/build &&\
+    cd /HOME/log4cpp/build &&\
     cmake .. &&\
     make &&\
     make install &&\
-    cd /INSS/ &&\
+    cd /HOME/ &&\
     # GENIE SOURCE
-    git clone https://github.com/GENIE-MC/Generator.git --branch R-3_04_02 &&\
-    cd /INSS &&\
+    git clone https://github.com/GENIE-MC/Generator.git --branch R-3_06_02 &&\
+    cd /HOME &&\
     # PYTHIA6
-    source /INSS/Generator/src/scripts/build/ext/build_pythia6.sh &&\
-    cd /INSS &&\
+    source /HOME/Generator/src/scripts/build/ext/build_pythia6.sh &&\
+    cd /HOME &&\
     # ROOT
     git clone --branch v6-30-00-patches --depth=1 https://github.com/root-project/root.git ./root &&\
-    mkdir /INSS/root/install &&\
-    cd /INSS/root/build &&\
-    cmake ../ -DPYTHIA6_DIR=/INSS/v6_428 -Dpythia6=ON -Dmathmore=ON -DCMAKE_INSTALL_PREFIX=../install &&\
+    mkdir /HOME/root/install &&\
+    cd /HOME/root/build &&\
+    cmake ../ -DPYTHIA6_DIR=/HOME/v6_428 -Dpythia6=ON -Dmathmore=ON -DCMAKE_INSTALL_PREFIX=../install &&\
     make -j4 &&\
     make install &&\
-    source /INSS/root/install/bin/thisroot.sh &&\
-    cd /INSS &&\
+    source /HOME/root/install/bin/thisroot.sh &&\
+    cd /HOME &&\
     # GENIE
-    export GENIE=/INSS/Generator &&\
-    export LHAPDF=/INSS/LHAPDF-6.5.4 &&\
+    export GENIE=/HOME/Generator &&\
+    export LHAPDF=/HOME/LHAPDF-6.5.4 &&\
     export PATH=$LHAPDF/bin:$PATH &&\
     export LD_LIBRARY_PATH=$LHAPDF/install/lib:$LD_LIBRARY_PATH &&\
     export LHAPDF_DATA_PATH=$LHAPDF/share/LHAPDF &&\
-    export LD_LIBRARY_PATH=/INSS/LHAPDF-6.5.4/installation/lib:$LD_LIBRARY_PATH &&\
-    export LD_LIBRARY_PATH=/INSS/v6_428/lib:$LD_LIBRARY_PATH &&\
+    export LD_LIBRARY_PATH=/HOME/LHAPDF-6.5.4/installation/lib:$LD_LIBRARY_PATH &&\
+    export LD_LIBRARY_PATH=/HOME/v6_428/lib:$LD_LIBRARY_PATH &&\
     export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH &&\
-    export GENIE_INSTALL_DIR=/INSS/Generator/installation/ &&\
+    export GENIE_INSTALL_DIR=/HOME/Generator/installation/ &&\
     export LD_LIBRARY_PATH=$GENIE_INSTALL_DIR/lib:$LD_LIBRARY_PATH &&\
-    cd /INSS/Generator &&\
+    cd /HOME/Generator &&\
     ./configure \
-    --prefix=/INSS/Generator/installation/ \
+    --prefix=/HOME/Generator/installation/ \
     --disable-profiler \
     --disable-validation-tools \
     --disable-cernlib \
@@ -109,19 +109,20 @@ RUN mkdir /INSS &&\
     --enable-fnal \
     --enable-atmo \
     --enable-nucleon-decay \
+    --enable-dark-neutrino \
     --disable-masterclass \
     --disable-debug \
     --with-optimiz-level=O2 \
-    --with-pythia6-lib=/INSS/v6_428/lib/ \
-    --with-lhapdf6-inc=/INSS/LHAPDF-6.5.4/include/ \
-    --with-lhapdf6-lib=/INSS/LHAPDF-6.5.4/installation/lib/ \
+    --with-pythia6-lib=/HOME/v6_428/lib/ \
+    --with-lhapdf6-inc=/HOME/LHAPDF-6.5.4/include/ \
+    --with-lhapdf6-lib=/HOME/LHAPDF-6.5.4/installation/lib/ \
     --with-libxml2-inc=/usr/include/libxml2/ \
     --with-libxml2-lib=/usr/lib/ \
     --with-log4cpp-inc=/usr/local/include/log4cpp/ \
     --with-log4cpp-lib=/usr/local/lib/ &&\
     make -j6 &&\
     make install &&\
-    cd /INSS
+    cd /HOME
 
-RUN echo "source /INSS/root/install/bin/thisroot.sh" >> ~/.bashrc
-WORKDIR /INSS
+RUN echo "source /HOME/root/install/bin/thisroot.sh" >> ~/.bashrc
+WORKDIR /HOME
