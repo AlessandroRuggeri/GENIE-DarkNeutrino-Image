@@ -27,7 +27,7 @@ From the Docker Desktop app, use the search bar and search the `genie-inss` imag
 
 Click on the pull button of the wanted version. This will download the image and, after the download, it can be run as described starting from the [Exporting X11](#exporting-x11) section.
 
-## Get the code
+<!-- ## Get the code
 With Docker Desktop open, start a terminal (standard one for Linux and Mac, [like this](https://docs.docker.com/desktop/wsl/use-wsl/) for Windows with WSL).
 From the terminal, create a working directory, access it, and clone this repository:
 ```console
@@ -81,9 +81,10 @@ This will create an image from the instructions in the dockerfile. It should loo
  => CACHED [2/3] RUN rm /bin/sh && ln -s /bin/bash /bin/sh &&    apt-get -y update &&    apt-get -y upgrade &&    apt-get -y install git &&    apt-get -y install dpkg-dev   0.0s
  => [3/3] RUN mkdir /INSS &&    cd /INSS &&    wget https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.5.4.tar.gz -O LHAPDF-6.5.4.tar.gz &&    tar xf LHAPDF-6.5.4.tar.gz  1227.3s
  ```
-This will (slowly) go through all the instructions, installing all the software, setting all the environmental variables, and all this type of stuff.
+This will (slowly) go through all the instructions, installing all the software, setting all the environmental variables, and all this type of stuff. -->
 
-## Download a pre-built image from Docker Hub
+## Download the pre-built image from Docker Hub
+You can find the `alessandroruggeri/genie-dnu` image on Docker Hub and download it
 
 
 ## Exporting X11
@@ -114,8 +115,8 @@ In order to access the files produced in the container from your local machine (
 ```console
 # create the directory to be mounted
 mkdir your/host/path
-# run the container
-docker run -e DISPLAY=host.docker.internal:0 -v your/host/path:/HOME/workspace -it --name genie-dnu-container genie-dnu
+# run the container (choose the container name you prefer with --name)
+docker run -e DISPLAY=host.docker.internal:0 -v your/host/path:/HOME/workspace/:z -it --name genie-dnu-container genie-dnu
 ```
 
 This will launch and enter the container. The shell should be something like this now:
