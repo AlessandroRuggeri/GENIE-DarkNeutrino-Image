@@ -17,8 +17,8 @@ To do so, follow the instructions available on the docker wiki:
  * [Instruction for Linux](https://docs.docker.com/desktop/install/linux-install/)
 
  After the installation, launch Docker Desktop. 
- If you want to use a pre-buit image, go to the [Get a prebuilt image](#get-a-pre-built-image). 
- If you want to build it yourself, go to the [Get the code section](#get-the-code).
+ If you want to use a pre-buit image, go to the [Get a prebuilt image](#download-the-pre-built-image-from-docker-hub). 
+ <!-- If you want to build it yourself, go to the [Get the code section](#get-the-code). -->
 
 <!-- ## Get a pre built image
 From the Docker Desktop app, use the search bar and search the `genie-inss` images. Two images should appear:
@@ -84,8 +84,8 @@ This will create an image from the instructions in the dockerfile. It should loo
 This will (slowly) go through all the instructions, installing all the software, setting all the environmental variables, and all this type of stuff. -->
 
 ## Download the pre-built image from Docker Hub
-You can find the `alessandroruggeri/genie-dnu` image on Docker Hub and download it
-
+From the Docker Desktop app, use the search bar and search the `alessandroruggeri/genie-dnu` image.
+Click on the pull button of the wanted version. This will download the image and, after the download, it can be run as described starting from the [Exporting X11](#exporting-x11) section.
 
 ## Exporting X11
 With the image built, we could now run a container using it. Before doing so, we need to set the export of the display so that we can use graphical interfaces from within the container.
