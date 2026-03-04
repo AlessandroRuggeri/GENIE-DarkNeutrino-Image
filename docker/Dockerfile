@@ -133,5 +133,6 @@ RUN source /HOME/root/install/bin/thisroot.sh &&\
     make install
 
 RUN echo "source /HOME/root/install/bin/thisroot.sh" >> ~/.bashrc
+RUN apt-get install nano
 
 WORKDIR /HOME
